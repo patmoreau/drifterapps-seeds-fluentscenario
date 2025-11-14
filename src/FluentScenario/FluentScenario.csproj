@@ -5,6 +5,7 @@
         <RootNamespace>DrifterApps.Seeds.FluentScenario</RootNamespace>
         <Product>DrifterApps.Seeds.FluentScenario</Product>
         <PackageId>DrifterApps.Seeds.FluentScenario</PackageId>
+        <TargetFrameworks>net8.0;net9.0;net10.0</TargetFrameworks>
     </PropertyGroup>
 
     <ItemGroup>

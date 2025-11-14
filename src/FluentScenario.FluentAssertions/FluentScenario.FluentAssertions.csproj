@@ -5,6 +5,7 @@
         <RootNamespace>DrifterApps.Seeds.FluentScenario.FluentAssertions</RootNamespace>
         <PackageId>DrifterApps.Seeds.FluentScenario.FluentAssertions</PackageId>
         <Product>DrifterApps.Seeds.FluentScenario.FluentAssertions</Product>
+        <TargetFrameworks>net8.0;net9.0;net10.0</TargetFrameworks>
     </PropertyGroup>
 
     <ItemGroup>
