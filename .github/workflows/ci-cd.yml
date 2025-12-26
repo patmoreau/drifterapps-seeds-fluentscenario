@@ -118,7 +118,7 @@ jobs:
 
       - name: Upload Test Results
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: Test Results for .NET ${{ matrix.framework }}
           path: ./tests-results/**/*.trx
@@ -154,7 +154,7 @@ jobs:
 
       - name: Upload badge to artifacts
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: Test Badge .NET ${{ matrix.framework }}
           path: seeds-fluentscenario-tests-badge-${{ matrix.framework }}.svg
