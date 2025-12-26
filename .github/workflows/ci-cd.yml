@@ -34,8 +34,8 @@ jobs:
 
     outputs:
       version: ${{ steps.gitversion.outputs.majorMinorPatch }}
-      assembly-version: ${{ steps.gitversion.outputs.AssemblySemFileVer }}
-      nuget-version: ${{ steps.gitversion.outputs.NuGetVersionV2 }}
+      assembly-version: ${{ steps.gitversion.outputs.assemblySemVer }}
+      nuget-version: ${{ steps.gitversion.outputs.nuGetVersionV2 }}
 
     steps:
       - uses: actions/checkout@v4
