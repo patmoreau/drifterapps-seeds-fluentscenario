@@ -64,9 +64,7 @@ jobs:
 
       - name: Display GitVersion outputs
         run: |
-          echo "MajorMinorPatch: ${{ steps.gitversion.outputs.majorMinorPatch }}"
-          echo "AssemblySemFileVer: ${{ steps.gitversion.outputs.assemblySemVer }}"
-          echo "NuGetVersionV2: ${{ steps.gitversion.outputs.semVer }}"
+          echo "All outputs: ${{ toJSON(steps.gitversion.outputs) }}"
 
       - name: Enable workflow commands
         run: |
