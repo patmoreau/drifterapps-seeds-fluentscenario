@@ -10,8 +10,8 @@ public class ScenarioBasicsTests(ITestOutputHelper testOutputHelper)
     [Fact]
     public async Task SimpleScenario()
     {
-        int temperatureInside = 0;
-        int temperatureOutside = 0;
+        var temperatureInside = 0;
+        var temperatureOutside = 0;
 
         await ScenarioRunner.Create("when the weather is too cold", _scenarioOutput)
             .Given("I want to go play outside", () => temperatureInside = 19)

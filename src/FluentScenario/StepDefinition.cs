@@ -15,10 +15,10 @@ internal record StepDefinition
     internal Func<object?, Task<object?>> Step { get; }
 
     internal static StepDefinition Create(string command, string description, Action step) =>
-        new(command, description, async _ =>
+        new(command, description, _ =>
         {
-            await Task.Run(step).ConfigureAwait(false);
-            return null;
+            step();
+            return Task.FromResult<object?>(null);
         });
 
     internal static StepDefinition Create(string command, string description, Func<Task> step) =>
@@ -29,14 +29,14 @@ internal record StepDefinition
         });
 
     internal static StepDefinition Create<T>(string command, string description, Action<Ensure<T>> step) =>
-        new(command, description, async input =>
+        new(command, description, input =>
         {
-            await Task.Run(() => step(Ensure<T>.From(input))).ConfigureAwait(false);
-            return null;
+            step(Ensure<T>.From(input));
+            return Task.FromResult<object?>(null);
         });
 
     internal static StepDefinition Create<T>(string command, string description, Func<T> step) =>
-        new(command, description, async _ => await Task.Run(step).ConfigureAwait(false));
+        new(command, description, _ => Task.FromResult<object?>(step()));
 
     internal static StepDefinition Create<T>(string command, string description, Func<Task<T>> step) =>
         new(command, description, async _ => await step().ConfigureAwait(false));
@@ -50,7 +50,7 @@ internal record StepDefinition
 
     internal static StepDefinition Create<T, T2>(string command, string description, Func<Ensure<T>, T2> step) =>
         new(command, description,
-            async input => await Task.Run(() => step(Ensure<T>.From(input))).ConfigureAwait(false));
+            input => Task.FromResult<object?>(step(Ensure<T>.From(input))));
 
     internal static StepDefinition Create<T, T2>(string command, string description, Func<Ensure<T>, Task<T2>> step) =>
         new(command, description,

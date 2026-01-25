@@ -64,6 +64,65 @@ public class StepRunnerTests
         );
     }
 
+    [Fact]
+    public async Task GivenExecute_WhenAssertionThrown_ThenXUnitCatchesFailure()
+    {
+        // arrange
+        var output = new MockScenarioOutput();
+        var expectedValue = 42;
+        var actualValue = 99;
+        var sut = ScenarioRunner.Create("Testing assertion propagation", output)
+            .Given(runner => runner.Execute("value should be 42", () => actualValue.Should().Be(expectedValue)));
+
+        // act
+        var action = () => sut.PlayAsync();
+
+        // assert
+        await action.Should().ThrowAsync<XunitException>()
+            .WithMessage($"Expected actualValue to be {expectedValue}, but found {actualValue}*");
+
+        output.Messages.Should().Contain($"{ScenarioRunner.FailCheck} GIVEN value should be 42");
+    }
+
+    [Fact]
+    public async Task GivenExecute_WhenAssertionThrownInAction_ThenXUnitCatchesFailure()
+    {
+        // arrange
+        var output = new MockScenarioOutput();
+        var sut = ScenarioRunner.Create("Testing assertion in Action", output)
+            .Given(runner => runner.Execute("should fail", () =>
+            {
+                1.Should().Be(2, "this assertion should be caught by xUnit");
+            }));
+
+        // act
+        var action = () => sut.PlayAsync();
+
+        // assert
+        await action.Should().ThrowAsync<XunitException>()
+            .WithMessage("*this assertion should be caught by xUnit*");
+    }
+
+    [Fact]
+    public async Task GivenExecute_WhenAssertionThrownInActionWithEnsure_ThenXUnitCatchesFailure()
+    {
+        // arrange
+        var output = new MockScenarioOutput();
+        var sut = ScenarioRunner.Create("Testing assertion in Action<Ensure<T>>", output)
+            .Given("initial value", () => 100)
+            .When(runner => runner.Execute<int>("value should be less than 50", ensure =>
+            {
+                ensure.Value.Should().BeLessThan(50, "value must be under threshold");
+            }));
+
+        // act
+        var action = () => sut.PlayAsync();
+
+        // assert
+        await action.Should().ThrowAsync<XunitException>()
+            .WithMessage("*value must be under threshold*");
+    }
+
     internal class StepRunnerData : TheoryData<string, MockScenarioOutput, Action<IStepRunner>>
     {
         private readonly MockScenarioOutput _scenarioOutput = new();
