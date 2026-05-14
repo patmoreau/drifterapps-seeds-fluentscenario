@@ -104,7 +104,7 @@ jobs:
         run: dotnet restore
 
       - name: Build
-        run: dotnet build --no-restore --configuration Release --framework ${{ matrix.framework }} /property:Version=${{ env.ASSEMBLY_VERSION }}
+        run: dotnet build --no-restore --configuration Release --framework ${{ matrix.framework }} /property:Version=${{ env.ASSEMBLY_VERSION }} /property:GeneratePackageOnBuild=false
 
       - name: Tests
         run: dotnet test --no-restore --no-build --configuration Release --framework ${{ matrix.framework }} --logger 'trx;verbosity=normal' --results-directory ./tests-results --collect 'XPlat Code Coverage'
