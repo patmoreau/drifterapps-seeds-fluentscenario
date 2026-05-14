@@ -16,14 +16,12 @@ The library has two main NuGet packages:
 ```bash
 dotnet build                                    # Build all projects (Debug)
 dotnet build --configuration Release            # Build in Release mode
-dotnet build --framework net10.0                # Build specific framework
 ```
 
 ### Test
 ```bash
 dotnet test                                     # Run all tests
 dotnet test --configuration Release             # Test in Release mode
-dotnet test --framework net10.0                 # Test specific framework
 dotnet test --filter "ClassName=TestClass"     # Run specific test class
 dotnet test --filter "FullyQualifiedName~TestMethodName"  # Run specific test
 dotnet test --logger "console;verbosity=detailed"  # Verbose output
@@ -119,7 +117,7 @@ Tests inject implementations of `IScenarioOutput` for output handling:
 
 ## Technology Stack
 
-- **.NET**: Targets net8.0, net9.0, and net10.0 (managed via Directory.Build.props)
+- **.NET**: Targets net10.0 only (set in Directory.Build.props; individual projects must not override `TargetFramework`)
 - **Testing Framework**: xUnit v3
 - **Assertions**: FluentAssertions 7.2.2
 - **Mocking**: NSubstitute 5.3.0
@@ -141,6 +139,7 @@ Centralized build settings applied to all projects:
 - ManagePackageVersionsCentrally: true (via Directory.Packages.props)
 - GenerateDocumentationFile: true (XML docs for IntelliSense)
 - NuGet metadata (authors, license, repository URLs)
+- `llms.txt` packed into every NuGet package root (alongside README.md and icon.png) for AI agent discoverability
 
 ### Directory.Packages.props
 Centralized package version management. All package versions defined here, referenced projects use simple `<PackageReference>` without versions.
@@ -256,8 +255,7 @@ Do NOT add all code to ScenarioRunner.cs; maintain file organization.
 New features must have:
 1. Unit tests in `Tests/` (not in `Samples/`)
 2. Sample/demonstration test if it's a new API pattern (in `Samples/`)
-3. All frameworks tested: net8.0, net9.0, net10.0
-4. Code coverage maintained (coverlet integrated)
+3. Code coverage maintained (coverlet integrated)
 
 ## Dependencies to Know
 
