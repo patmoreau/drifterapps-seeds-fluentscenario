@@ -19,6 +19,10 @@
         <None Include="../../README.md" Pack="true" PackagePath="\"/>
         <None Include="../../icon.png" Pack="true" PackagePath="\"/>
         <None Include="../../llms.txt" Pack="true" PackagePath="\"/>
+        <None Include="../../ARCHITECTURE.md" Pack="true" PackagePath="\"/>
+        <None Include="../../docs/AI-GUIDELINES.md" Pack="true" PackagePath="\docs\"/>
+        <None Include="../../docs/API.md" Pack="true" PackagePath="\docs\"/>
+        <None Include="../../docs/EXAMPLES.md" Pack="true" PackagePath="\docs\"/>
     </ItemGroup>
 
     <!-- Enable a readme for all projects and configurations -->
