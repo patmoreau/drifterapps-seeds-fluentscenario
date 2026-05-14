@@ -1,0 +1,237 @@
+# DrifterApps.Seeds.FluentScenario
+
+A C# library for writing expressive BDD (Behavior-Driven Development) test scenarios using a fluent Given-When-Then API.
+
+## NuGet Packages
+
+```
+DrifterApps.Seeds.FluentScenario                  # Core library
+DrifterApps.Seeds.FluentScenario.FluentAssertions # Optional: FluentAssertions integration
+```
+
+Targets: net10.0
+
+## Core Concepts
+
+### ScenarioRunner
+The entry point. Create one per test, chain steps, then call `PlayAsync()` to execute them sequentially.
+
+### Ensure<T>
+A readonly struct that wraps values passed between steps. Carries a validity flag so steps can safely check whether input arrived. Use `.IsValid` to check, `.Value` to unwrap (throws if invalid), or implicit conversion to `T`.
+
+### IStepRunner
+A sub-runner passed into `Given(Action<IStepRunner>)` overloads. Lets you group related sub-steps inside a single BDD keyword and share context between them.
+
+### Context
+`SetContextData(key, value)` / `GetContextData<T>(key)` — both `ScenarioRunner` and `IStepRunner` implement `IRunnerContext`. Use this to share state when not using return-value chaining.
+
+### IScenarioOutput
+The output sink for step results. xUnit: wrap `ITestOutputHelper`. Implement the interface for other frameworks.
+
+## Choosing a Pattern
+
+| Situation | Pattern to use |
+|---|---|
+| Quick inline scenario | Inline lambdas with explicit descriptions |
+| Reusable steps across tests | `IStepRunner` methods |
+| Self-documenting method names as descriptions | `CallerMemberName` overloads |
+| Passing values between steps type-safely | `Ensure<T>` return-value chaining |
+| Sharing data without return values | `SetContextData` / `GetContextData<T>` |
+
+## Pattern 1 — Inline lambdas
+
+Steps defined directly in the chain. Pass a string description.
+
+```csharp
+[Fact]
+public async Task WeatherScenario()
+{
+    var temperatureInside = 0;
+    var temperatureOutside = 0;
+
+    await ScenarioRunner.Create("when the weather is too cold", _output)
+        .Given("I want to go play outside", () => temperatureInside = 19)
+        .When("the temperature is below 0C", () => temperatureOutside = -5)
+        .Then("I stay inside if the difference is greater than 20C",
+            () => (temperatureInside - temperatureOutside).Should().BeGreaterThan(20))
+        .PlayAsync();
+}
+```
+
+## Pattern 2 — IStepRunner methods (reusable steps)
+
+Pass a method that accepts `IStepRunner`. Call `runner.Execute(description, action)` inside. Steps can share state via context.
+
+```csharp
+[Fact]
+public async Task WeatherScenario()
+{
+    await ScenarioRunner.Create("when the weather is too cold", _output)
+        .Given(IWantToGoPlayOutside)
+        .When(TheTemperatureIsBelow0C)
+        .Then(IStayInsideIfDifferenceIsGreaterThan20C)
+        .PlayAsync();
+}
+
+private static void IWantToGoPlayOutside(IStepRunner runner) =>
+    runner.Execute("I want to go play outside", () =>
+        runner.SetContextData("temperatureInside", 19));
+
+private static void TheTemperatureIsBelow0C(IStepRunner runner) =>
+    runner.Execute("the temperature is below 0C", () =>
+        runner.SetContextData("temperatureOutside", -5));
+
+private static void IStayInsideIfDifferenceIsGreaterThan20C(IStepRunner runner) =>
+    runner.Execute("I stay inside if the difference is greater than 20C", () =>
+    {
+        var inside = runner.GetContextData<int>("temperatureInside");
+        var outside = runner.GetContextData<int>("temperatureOutside");
+        (inside - outside).Should().BeGreaterThan(20);
+    });
+```
+
+## Pattern 3 — CallerMemberName (method name = description)
+
+Omit the description string and use the method name overload. The method name is converted from camelCase to a sentence automatically (`TheTemperatureIsBelow0C` → "the temperature is below 0 c").
+
+```csharp
+[Fact]
+public async Task WeatherScenario()
+{
+    await ScenarioRunner.Create(_output)  // no description string → method name used
+        .Given(IWantToGoPlayOutside)
+        .When(TheTemperatureIsBelow0C)
+        .Then(IStayInsideIfDifferenceIsGreaterThan20C)
+        .PlayAsync();
+}
+
+// Same step methods as Pattern 2, but use Execute() without a description string:
+private static void IWantToGoPlayOutside(IStepRunner runner) =>
+    runner.Execute(() => runner.SetContextData("temperatureInside", 19));
+```
+
+## Pattern 4 — Ensure<T> value chaining
+
+Pass a typed input to `ScenarioRunner.Create<T>()`. Each step can return a value that the next step receives as `Ensure<T>`. Use the FluentAssertions extension `.Should().BeValid()` to assert validity.
+
+```csharp
+[Theory]
+[InlineData(19)]
+public async Task WeatherScenario(int inside)
+{
+    await ScenarioRunner.Create("when the weather is too cold", inside, _output)
+        .Given("I want to go play outside", (Ensure<int> temperatureInside) =>
+        {
+            temperatureInside.Should().BeValid();
+            return (temperatureInside.Value, Outside: -5);
+        })
+        .When("the temperature difference is great",
+            (Ensure<(int Inside, int Outside)> temperatures) =>
+            {
+                temperatures.Should().BeValid();
+                return temperatures.Value.Inside - temperatures.Value.Outside;
+            })
+        .Then("I stay inside if the difference is greater than 20C",
+            (Ensure<int> difference) =>
+                difference.Should().BeValid()
+                    .And.Subject.Value.Should().BeGreaterThan(20))
+        .PlayAsync();
+}
+```
+
+## IScenarioOutput — Framework Adapters
+
+### xUnit
+```csharp
+public sealed class XUnitScenarioOutput(ITestOutputHelper output) : IScenarioOutput
+{
+    public void WriteLine(string message) => output.WriteLine(message);
+    public void WriteLine(string format, params object[] args) => output.WriteLine(format, args);
+}
+```
+
+### NUnit / MSTest / other
+Implement the two `WriteLine` methods pointing at your framework's logger.
+
+## API Quick Reference
+
+### ScenarioRunner.Create — factory overloads
+```csharp
+ScenarioRunner.Create(string description, IScenarioOutput output)
+ScenarioRunner.Create(IScenarioOutput output, [CallerMemberName] string description = "")
+ScenarioRunner.Create<T>(string description, T input, IScenarioOutput output)
+ScenarioRunner.Create<T>(T input, IScenarioOutput output, [CallerMemberName] string description = "")
+```
+
+### Step methods — Given / When / Then / And
+All four keywords share identical overload sets. Replace `Given` with `When`, `Then`, or `And` as needed.
+
+```csharp
+// No input, no output
+.Given("description", () => { })
+.Given("description", async () => { })
+.Given(() => { })                          // CallerMemberName
+.Given(async () => { })                   // CallerMemberName
+
+// No input, with output
+.Given<T>("description", () => value)
+.Given<T>("description", async () => value)
+.Given<T>(() => value)                    // CallerMemberName
+
+// With Ensure<T> input, no output
+.Given<T>("description", (Ensure<T> input) => { })
+.Given<T>("description", async (Ensure<T> input) => { })
+.Given<T>((Ensure<T> input) => { })      // CallerMemberName
+
+// With Ensure<T> input, with output
+.Given<T, T2>("description", (Ensure<T> input) => value)
+.Given<T, T2>("description", async (Ensure<T> input) => value)
+.Given<T, T2>((Ensure<T> input) => value) // CallerMemberName
+
+// IStepRunner delegation
+.Given(runner => { runner.Execute(...); })
+```
+
+### IStepRunner.Execute — same overload set
+```csharp
+runner.Execute("description", () => { })
+runner.Execute("description", async () => { })
+runner.Execute<T>("description", (Ensure<T> input) => { })
+runner.Execute<T>("description", () => value)
+runner.Execute<T, T2>("description", (Ensure<T> input) => value)
+// ... and CallerMemberName variants of each
+```
+
+### Execution
+```csharp
+await runner.PlayAsync();          // Execute all steps; throws on first failure
+await runner.PlayAsync<T>();       // Execute and return final step result as Ensure<T>
+```
+
+### Ensure<T>
+```csharp
+bool isValid = ensure.IsValid;
+T value = ensure.Value;            // throws InvalidOperationException if !IsValid
+T implicit = ensure;               // implicit operator
+Ensure<T> wrapped = someValue;     // implicit operator
+
+// FluentAssertions (requires FluentScenario.FluentAssertions package)
+ensure.Should().BeValid();
+ensure.Should().BeInvalid();
+ensure.Should().HaveValue(expected);
+ensure.Should().BeNull();
+ensure.Should().NotBeNull();
+```
+
+### Context
+```csharp
+runner.SetContextData("key", value);
+T value = runner.GetContextData<T>("key");
+```
+
+## Common Mistakes
+
+- **Missing `await PlayAsync()`** — steps are registered lazily; nothing runs until `PlayAsync()` is called.
+- **Accessing `Ensure<T>.Value` without checking `IsValid`** — throws `InvalidOperationException` when the input did not arrive (e.g., first step with no `Create<T>` input). Always assert or check first.
+- **Using `GetContextData<T>` with wrong type** — will throw at runtime. Keep keys and types consistent.
+- **Mixing return-value chaining and context storage in the same scenario** — pick one approach per scenario for clarity.

@@ -1,5 +1,3 @@
-using Xunit.Abstractions;
-
 namespace FluentScenario.Tests.Samples;
 
 /// <summary>

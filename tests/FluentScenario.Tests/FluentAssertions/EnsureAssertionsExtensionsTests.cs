@@ -20,7 +20,7 @@ public class EnsureAssertionsExtensionsTests
 
     [Theory]
     [ClassData(typeof(BecauseData))]
-    public void GivenBeValid_WhenIsNotValid_ShouldThrow(string because, object[] becauseArgs)
+    public void GivenBeValid_WhenIsNotValid_ShouldThrow(string because, string[] becauseArgs)
     {
         // Arrange
         var ensure = Ensure<int>.From(null);
@@ -49,7 +49,7 @@ public class EnsureAssertionsExtensionsTests
 
     [Theory]
     [ClassData(typeof(BecauseData))]
-    public void GivenBeInvalid_WhenIsValid_ShouldThrow(string because, object[] becauseArgs)
+    public void GivenBeInvalid_WhenIsValid_ShouldThrow(string because, string[] becauseArgs)
     {
         // Arrange
         var ensure = Ensure<int>.From(_faker.Random.Int());
@@ -78,7 +78,7 @@ public class EnsureAssertionsExtensionsTests
 
     [Theory]
     [ClassData(typeof(BecauseData))]
-    public void GivenBeNull_WhenIsNotNull_ShouldThrow(string because, object[] becauseArgs)
+    public void GivenBeNull_WhenIsNotNull_ShouldThrow(string because, string[] becauseArgs)
     {
         // Arrange
         var value = _faker.Random.Int();
@@ -108,7 +108,7 @@ public class EnsureAssertionsExtensionsTests
 
     [Theory]
     [ClassData(typeof(BecauseData))]
-    public void GivenNotBeNull_WhenIsNull_ShouldThrow(string because, object[] becauseArgs)
+    public void GivenNotBeNull_WhenIsNull_ShouldThrow(string because, string[] becauseArgs)
     {
         // Arrange
         var ensure = Ensure<int?>.From(null);
@@ -138,7 +138,7 @@ public class EnsureAssertionsExtensionsTests
 
     [Theory]
     [ClassData(typeof(BecauseData))]
-    public void GivenHaveValue_WhenNotSame_ShouldThrow(string because, object[] becauseArgs)
+    public void GivenHaveValue_WhenNotSame_ShouldThrow(string because, string[] becauseArgs)
     {
         // Arrange
         var value = _faker.Random.Int();
@@ -154,7 +154,7 @@ public class EnsureAssertionsExtensionsTests
         act.Should().Throw<XunitException>().WithMessage(expectedMessage);
     }
 
-    private static string GetExpectedMessage(string messageFormat, string because, params object[] becauseArgs)
+    private static string GetExpectedMessage(string messageFormat, string because, params string[] becauseArgs)
     {
         var expectedBecause = string.Format(CultureInfo.InvariantCulture, because, becauseArgs);
         return string.Format(CultureInfo.InvariantCulture, messageFormat,
