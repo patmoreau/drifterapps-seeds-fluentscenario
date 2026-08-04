@@ -37,7 +37,7 @@ public class ScenarioRunnerTests
         // assert
         await action.Should().ThrowAsync<InvalidOperationException>().WithMessage("Test exception");
         _scenarioOutput.Received().WriteLine(
-            Arg.Is<string>(x => x.Contains($"{ScenarioRunner.FailCheck} GIVEN Test failure")));
+            Arg.Is<string>(x => x != null && x.Contains($"{ScenarioRunner.FailCheck} GIVEN Test failure")));
     }
 
     [Fact]
@@ -51,7 +51,7 @@ public class ScenarioRunnerTests
 
         // assert
         _scenarioOutput.Received().WriteLine(
-            Arg.Is<string>(x => x.Contains("given scenario when no description then scenario is member name")));
+            Arg.Is<string>(x => x != null && x.Contains("given scenario when no description then scenario is member name")));
     }
 
     [Fact]
