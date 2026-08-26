@@ -107,7 +107,7 @@ jobs:
         run: dotnet build --no-restore --configuration Release --framework ${{ matrix.framework }} /property:Version=${{ env.ASSEMBLY_VERSION }} /property:GeneratePackageOnBuild=false /maxcpucount:1
 
       - name: Tests
-        run: dotnet test --no-restore --no-build --configuration Release --framework ${{ matrix.framework }} --report-xunit-trx --report-xunit-trx-filename test-results.xml --results-directory ./tests-results --coverage --coverage-output-format cobertura
+        run: dotnet test --no-restore --no-build --configuration Release --framework ${{ matrix.framework }} --report-xunit-junit --report-xunit-junit-filename test-results.xml --results-directory ./tests-results --coverage --coverage-output-format cobertura
 
       - name: Upload Test Results
         if: always()
@@ -124,7 +124,7 @@ jobs:
         with:
           name: Tests on .NET ${{ matrix.framework }}
           path: ./tests-results/test-results.xml
-          reporter: dotnet-trx
+          reporter: java-junit
 
       - name: Code Coverage Summary Report
         uses: irongut/CodeCoverageSummary@v1.3.0
