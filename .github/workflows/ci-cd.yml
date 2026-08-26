@@ -107,14 +107,16 @@ jobs:
         run: dotnet build --no-restore --configuration Release --framework ${{ matrix.framework }} /property:Version=${{ env.ASSEMBLY_VERSION }} /property:GeneratePackageOnBuild=false /maxcpucount:1
 
       - name: Tests
-        run: dotnet test --no-restore --no-build --configuration Release --framework ${{ matrix.framework }} --report-xunit-trx --report-xunit-trx-filename test-results.xml --results-directory ./tests-results --coverage --coverage-output-format cobertura
+        run: dotnet test --no-restore --no-build --configuration Release --framework ${{ matrix.framework }} --report-trx --report-trx-filename test-results.trx --results-directory ./tests-results --coverage --coverage-output-format cobertura
 
       - name: Upload Test Results
         if: always()
         uses: actions/upload-artifact@v7
         with:
           name: Test Results for .NET ${{ matrix.framework }}
-          path: ./tests-results/*.xml
+          path: |
+            ./tests-results/*.xml
+            ./tests-results/*.trx
           retention-days: 1
 
       - name: Test Report
@@ -123,7 +125,7 @@ jobs:
         if: always()
         with:
           name: Tests on .NET ${{ matrix.framework }}
-          path: ./tests-results/test-results.xml
+          path: ./tests-results/test-results.trx
           reporter: dotnet-trx
 
       - name: Code Coverage Summary Report
