@@ -117,7 +117,9 @@ re-run is safe but will not replace anything).
 
 ## 6. Verify on nuget.org
 
-Indexing takes a few minutes. Both packages ship from this repo:
+Indexing can take **up to an hour** — a successful `publish` job is the
+authority that the version shipped, not this index. Both packages ship from this
+repo:
 
 ```bash
 for pkg in drifterapps.seeds.fluentscenario drifterapps.seeds.fluentscenario.fluentassertions; do
@@ -126,8 +128,14 @@ done
 ```
 
 Report the released version, both package versions now on nuget.org, and the
-release URL. If indexing has not caught up yet, say so rather than reporting the
-old version as the result.
+release URL. Do not sit polling this endpoint: check once, and when it still
+shows the previous version, report the release as published on the strength of
+the `publish` log (`Your package was pushed.`) and say indexing is pending, with
+the command above for the user to re-check later. Never report the old version
+as the result.
+
+A symbols push logging `already exists at feed` is normal — nuget.org takes the
+`.snupkg` with the main package, so the separate symbols push dedups.
 
 ## Never
 
