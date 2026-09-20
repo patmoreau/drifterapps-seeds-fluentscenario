@@ -38,7 +38,8 @@ jobs:
 
       - name: Lint C# files with dotnet format
         id: lint
-        run: dotnet format --severity error --verbosity diagnostic --report ./linter-report || true
+        continue-on-error: true
+        run: dotnet format --verify-no-changes --severity error --verbosity diagnostic --report ./linter-report
 
       - name: Save report
         if: always()
@@ -49,7 +50,9 @@ jobs:
 
       - name: Check for errors
         if: ${{ steps.lint.outcome != 'success' }}
-        run: echo "::error::dotnet format found issues in the code. Please fix them."
+        run: |
+          echo "::error::dotnet format found issues in the code. Please fix them."
+          exit 1
 
   create_check:
     needs: [check_changes, csharp]
