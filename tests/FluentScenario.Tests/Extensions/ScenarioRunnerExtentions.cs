@@ -32,7 +32,7 @@ internal static class ScenarioRunnerExtensions
             parameters = [.. parameters, nameof(CallerMemberNameAttribute)];
         }
 
-        return (IScenarioRunner) methodCall.Invoke(runner, parameters)!;
+        return (IScenarioRunner)methodCall.Invoke(runner, parameters)!;
     }
 
     private static bool IsNotStepRunnerSignature(MethodInfo method) => method.GetParameters().Length > 1;

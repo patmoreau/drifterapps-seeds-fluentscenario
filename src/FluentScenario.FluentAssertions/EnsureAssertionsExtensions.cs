@@ -85,7 +85,7 @@ public class EnsureAssertions<TValue>(Ensure<TValue> instance)
     public new AndConstraint<EnsureAssertions<TValue>> BeNull(string because = "", params object[] becauseArgs)
     {
         _ = Execute.Assertion
-            .ForCondition(Subject is {IsNullable: true, IsValid: true, Value: null})
+            .ForCondition(Subject is { IsNullable: true, IsValid: true, Value: null })
             .BecauseOf(because, becauseArgs)
             .WithDefaultIdentifier(Identifier)
             .FailWith("Expected {context} to be <null>{reason}, but found {0}.", Subject.Value);
@@ -105,7 +105,7 @@ public class EnsureAssertions<TValue>(Ensure<TValue> instance)
     public new AndConstraint<EnsureAssertions<TValue>> NotBeNull(string because = "", params object[] becauseArgs)
     {
         _ = Execute.Assertion
-            .ForCondition(Subject is {IsValid: true, Value: not null})
+            .ForCondition(Subject is { IsValid: true, Value: not null })
             .BecauseOf(because, becauseArgs)
             .WithDefaultIdentifier(Identifier)
             .FailWith("Expected {context} not to be <null>{reason}.");

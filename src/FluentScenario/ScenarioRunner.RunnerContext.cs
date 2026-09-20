@@ -13,5 +13,5 @@ public sealed partial class ScenarioRunner
     public T GetContextData<T>(string contextKey) =>
         !_context.TryGetValue(contextKey, out var value)
             ? throw new KeyNotFoundException($"The context data with key {contextKey} was not found.")
-            : (T) value;
+            : (T)value;
 }
