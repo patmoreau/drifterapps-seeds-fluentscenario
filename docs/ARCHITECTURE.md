@@ -1,5 +1,9 @@
 # Architecture — DrifterApps.Seeds.FluentScenario
 
+> **Audience:** both. Developers *using* the library — it ships in the NuGet package — and
+> contributors *working on* it, since these decisions are load-bearing and must be read before
+> any of them is changed.
+
 ## Purpose
 
 FluentScenario structures test code into readable BDD (Behavior-Driven Development) scenarios without requiring a dedicated BDD tool (SpecFlow, Reqnroll, etc.). It targets teams who want expressive test names and Given-When-Then organisation while staying entirely within C# and their existing test runner.

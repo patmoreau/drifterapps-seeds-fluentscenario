@@ -1,5 +1,7 @@
 # API Reference — DrifterApps.Seeds.FluentScenario
 
+> **Audience:** developers *using* `DrifterApps.Seeds.FluentScenario` in their own project. Ships in the NuGet package.
+
 ## Namespaces
 
 | Namespace | Package | Contents |

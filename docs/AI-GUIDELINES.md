@@ -1,5 +1,7 @@
 # AI Guidelines — DrifterApps.Seeds.FluentScenario
 
+> **Audience:** developers *using* `DrifterApps.Seeds.FluentScenario` in their own project. Ships in the NuGet package.
+
 Guidelines for AI coding assistants generating or modifying code that uses this library.
 
 ## What This Library Is

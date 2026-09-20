@@ -1,5 +1,7 @@
 # Examples — DrifterApps.Seeds.FluentScenario
 
+> **Audience:** developers *using* `DrifterApps.Seeds.FluentScenario` in their own project. Ships in the NuGet package.
+
 Real-world usage examples beyond the basic weather scenario. All examples assume xUnit with:
 
 ```csharp
