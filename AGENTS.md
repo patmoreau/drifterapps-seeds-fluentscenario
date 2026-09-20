@@ -6,6 +6,23 @@
 ## Git workflow
 @docs/contributing/git-instructions.md
 
+## Task playbooks
+
+Recurring procedures live in `docs/contributing/tasks/`, one file per task. Read
+the matching playbook before starting that work:
+
+| Task | When |
+|---|---|
+| `add-keyword-overload.md` | Adding a step overload to `Given`/`When`/`Then`/`And` |
+| `create-github-release.md` | Cutting a release, which publishes to nuget.org |
+
+`scripts/sync-agent-files.sh` copies each playbook into the per-assistant command
+formats — `.claude/commands/`, `.cursor/commands/`, `.windsurf/workflows/` and
+`.github/prompts/` — so the same procedure is invocable as `/<task-name>` in each
+tool. Those copies are **generated**: edit the file in `docs/contributing/tasks/`,
+rerun the script, and commit both. `scripts/sync-agent-files.sh --check` runs in
+the `linter` workflow and fails when a copy is stale or orphaned.
+
 ## What this repository is
 
 This repo **is** the source of `DrifterApps.Seeds.FluentScenario` — a fluent BDD
