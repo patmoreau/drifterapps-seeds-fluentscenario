@@ -15,6 +15,9 @@ concurrency:
   group: ci-cd-${{ github.ref }}
   cancel-in-progress: true
 
+permissions:
+  contents: read
+
 env:
   PROJECT_NAME: DrifterApps Seeds FluentScenario
   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -74,6 +77,10 @@ jobs:
     runs-on: ubuntu-latest
     needs: set-version
 
+    permissions:
+      contents: read
+      checks: write
+
     strategy:
       fail-fast: false
       matrix:
@@ -97,8 +104,6 @@ jobs:
           global-json-file: global.json
         env:
           NUGET_AUTH_TOKEN: ${{secrets.GITHUB_TOKEN}}
-
-      - run: echo '${{ steps.stepid.outputs.dotnet-version }}'
 
       - name: Restore packages
         run: dotnet restore
@@ -174,18 +179,19 @@ jobs:
           path: seeds-fluentscenario-tests-badge-${{ matrix.framework }}.svg
 
       - name: Upload badge to Gist
-        if: >
-          (github.event_name == 'workflow_run' && github.event.workflow_run.head_branch == 'main') ||
-          (github.event_name != 'workflow_run' && github.ref == 'refs/heads/main')
-        uses: exuanbo/actions-deploy-gist@v1
-        with:
-          token: ${{ secrets.GIST_TOKEN }}
-          gist_id: 51a2fc9fd8b7ed500ed3b6aabe0fc2d6
-          file_path: seeds-fluentscenario-tests-badge-${{ matrix.framework }}.svg
-          file_type: text
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        env:
+          GH_TOKEN: ${{ secrets.GIST_TOKEN }}
+          BADGE_FILE: seeds-fluentscenario-tests-badge-${{ matrix.framework }}.svg
+        run: |
+          jq -n --arg name "$BADGE_FILE" --rawfile content "$BADGE_FILE" \
+            '{files: {($name): {content: $content}}}' \
+            | gh api --method PATCH gists/51a2fc9fd8b7ed500ed3b6aabe0fc2d6 --input -
 
   tagging:
     needs: [ set-version, build ]
+    permissions:
+      contents: write
     uses: patmoreau/workflow-config/.github/workflows/tag-version.yml@main
     if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' }}
     with:
@@ -226,6 +232,8 @@ jobs:
 
   create_check:
     needs: [ check_changes, build ]
+    permissions:
+      checks: write
     uses: patmoreau/workflow-config/.github/workflows/create-check.yml@main
     if: always() && needs.check_changes.result == 'success'
     with:
