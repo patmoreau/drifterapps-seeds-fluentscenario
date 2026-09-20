@@ -154,6 +154,69 @@ public class EnsureAssertionsExtensionsTests
         act.Should().Throw<XunitException>().WithMessage(expectedMessage);
     }
 
+    [Theory]
+    [ClassData(typeof(BecauseData))]
+    public void GivenBeNull_WhenNotValid_ShouldThrow(string because, string[] becauseArgs)
+    {
+        // Arrange
+        var ensure = Ensure<int>.From(null);
+        var expectedMessage = GetExpectedMessage("Expected ensure to be <null>{0}, but found \"invalid value\".*",
+            because, becauseArgs);
+
+        // Act
+        Action act = () => ensure.Should().BeNull(because, becauseArgs);
+
+        // Assert
+        act.Should().Throw<XunitException>().WithMessage(expectedMessage);
+    }
+
+    [Theory]
+    [ClassData(typeof(BecauseData))]
+    public void GivenNotBeNull_WhenNotValid_ShouldThrow(string because, string[] becauseArgs)
+    {
+        // Arrange
+        var ensure = Ensure<int>.From(null);
+        var expectedMessage = GetExpectedMessage("Expected ensure not to be <null>{0}.*",
+            because, becauseArgs);
+
+        // Act
+        Action act = () => ensure.Should().NotBeNull(because, becauseArgs);
+
+        // Assert
+        act.Should().Throw<XunitException>().WithMessage(expectedMessage);
+    }
+
+    [Theory]
+    [ClassData(typeof(BecauseData))]
+    public void GivenHaveValue_WhenNotValid_ShouldThrow(string because, string[] becauseArgs)
+    {
+        // Arrange
+        var expectedValue = _faker.Random.Int();
+        var ensure = Ensure<int>.From(null);
+        var expectedMessage = GetExpectedMessage(
+            $"Expected ensure to have value {expectedValue}{{0}}, but found \"invalid value\".*",
+            because, becauseArgs);
+
+        // Act
+        Action act = () => ensure.Should().HaveValue(expectedValue, because, becauseArgs);
+
+        // Assert
+        act.Should().Throw<XunitException>().WithMessage(expectedMessage);
+    }
+
+    [Fact]
+    public void GivenHaveValue_WhenNullableValueIsNull_ThenShouldNotThrowException()
+    {
+        // Arrange
+        var ensure = Ensure<int?>.From(null);
+
+        // Act
+        Action act = () => ensure.Should().HaveValue(null);
+
+        // Assert
+        act.Should().NotThrow<XunitException>();
+    }
+
     private static string GetExpectedMessage(string messageFormat, string because, params string[] becauseArgs)
     {
         var expectedBecause = string.Format(CultureInfo.InvariantCulture, because, becauseArgs);

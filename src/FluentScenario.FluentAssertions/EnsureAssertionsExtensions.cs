@@ -33,6 +33,13 @@ public class EnsureAssertions<TValue>(Ensure<TValue> instance)
     /// </summary>
     protected override string Identifier => "ensure";
 
+    private const string InvalidValue = "invalid value";
+
+    /// <summary>
+    ///     Gets the value to report in a failure message, without dereferencing an invalid value.
+    /// </summary>
+    private object? FoundValue => Subject.IsValid ? Subject.Value : InvalidValue;
+
     /// <summary>
     ///     Asserts that the value is valid.
     /// </summary>
@@ -88,7 +95,7 @@ public class EnsureAssertions<TValue>(Ensure<TValue> instance)
             .ForCondition(Subject is { IsNullable: true, IsValid: true, Value: null })
             .BecauseOf(because, becauseArgs)
             .WithDefaultIdentifier(Identifier)
-            .FailWith("Expected {context} to be <null>{reason}, but found {0}.", Subject.Value);
+            .FailWith("Expected {context} to be <null>{reason}, but found {0}.", FoundValue);
 
         return new AndConstraint<EnsureAssertions<TValue>>(this);
     }
@@ -127,10 +134,10 @@ public class EnsureAssertions<TValue>(Ensure<TValue> instance)
         string because = "", params object[] becauseArgs)
     {
         _ = Execute.Assertion
-            .ForCondition(Subject.IsValid && Subject.Value!.Equals(expectedValue))
+            .ForCondition(Subject.IsValid && Equals(Subject.Value, expectedValue))
             .BecauseOf(because, becauseArgs)
             .WithDefaultIdentifier(Identifier)
-            .FailWith("Expected {context} to have value {0}{reason}, but found {1}.", expectedValue, Subject.Value);
+            .FailWith("Expected {context} to have value {0}{reason}, but found {1}.", expectedValue, FoundValue);
 
         return new AndConstraint<EnsureAssertions<TValue>>(this);
     }
