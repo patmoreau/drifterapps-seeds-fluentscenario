@@ -5,8 +5,8 @@ A C# library for writing expressive BDD (Behavior-Driven Development) test scena
 ## NuGet Packages
 
 ```
-DrifterApps.Seeds.FluentScenario                  # Core library
-DrifterApps.Seeds.FluentScenario.FluentAssertions # Optional: FluentAssertions integration
+DrifterApps.Seeds.FluentScenario                   # Core library
+DrifterApps.Seeds.FluentScenario.AwesomeAssertions # Optional: AwesomeAssertions integration
 ```
 
 Targets: net10.0
@@ -112,7 +112,7 @@ private static void IWantToGoPlayOutside(IStepRunner runner) =>
 
 ## Pattern 4 — Ensure<T> value chaining
 
-Pass a typed input to `ScenarioRunner.Create<T>()`. Each step can return a value that the next step receives as `Ensure<T>`. Use the FluentAssertions extension `.Should().BeValid()` to assert validity.
+Pass a typed input to `ScenarioRunner.Create<T>()`. Each step can return a value that the next step receives as `Ensure<T>`. Use the AwesomeAssertions extension `.Should().BeValid()` to assert validity.
 
 ```csharp
 [Theory]
@@ -215,7 +215,7 @@ T value = ensure.Value;            // throws InvalidOperationException if !IsVal
 T implicit = ensure;               // implicit operator
 Ensure<T> wrapped = someValue;     // implicit operator
 
-// FluentAssertions (requires FluentScenario.FluentAssertions package)
+// AwesomeAssertions (requires FluentScenario.AwesomeAssertions package)
 ensure.Should().BeValid();
 ensure.Should().BeInvalid();
 ensure.Should().HaveValue(expected);

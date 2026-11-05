@@ -18,11 +18,11 @@ DrifterApps.Seeds.FluentScenario           (core)
   └─ Ensure<T>
   └─ IScenarioRunner / IStepRunner / IRunnerContext / IScenarioOutput
 
-DrifterApps.Seeds.FluentScenario.FluentAssertions   (optional extension)
+DrifterApps.Seeds.FluentScenario.AwesomeAssertions  (optional extension)
   └─ EnsureAssertions<T>   (extends Ensure<T> with .Should())
 ```
 
-The FluentAssertions package has a hard dependency on FluentAssertions 7.x. The core package has no third-party runtime dependencies.
+The AwesomeAssertions package has a hard dependency on AwesomeAssertions 9.x. The core package has no third-party runtime dependencies.
 
 ---
 
@@ -161,11 +161,15 @@ This overload set is intentional. The goal is zero friction for any test shape. 
 
 ---
 
-## FluentAssertions Integration Design
+## AwesomeAssertions Integration Design
 
-`EnsureAssertions<T>` extends `ReferenceTypeAssertions<Ensure<T>, EnsureAssertions<T>>` from FluentAssertions. Placing it in the `FluentAssertions` namespace (with `#pragma disable IDE0130`) means callers only need `using FluentAssertions;` — no extra using statement for the integration package.
+`EnsureAssertions<T>` extends `ReferenceTypeAssertions<Ensure<T>, EnsureAssertions<T>>` from AwesomeAssertions. Placing it in the `AwesomeAssertions` namespace (with `#pragma disable IDE0130`) means callers only need `using AwesomeAssertions;` — no extra using statement for the integration package.
 
-The extension method `Should()` is defined on `Ensure<T>` (a struct), not on `object`, so it won't interfere with FluentAssertions' own `Should()` on arbitrary objects.
+`Should()` obtains the ambient `AssertionChain` via `AssertionChain.GetOrCreate()` and the assertions report through `CurrentAssertionChain`, so they participate in `AssertionScope` like the library's built-in assertions.
+
+AwesomeAssertions is the Apache-2.0 community fork of FluentAssertions 7, chosen over FluentAssertions 8+ because of the latter's commercial license.
+
+The extension method `Should()` is defined on `Ensure<T>` (a struct), not on `object`, so it won't interfere with AwesomeAssertions' own `Should()` on arbitrary objects.
 
 ---
 
@@ -190,7 +194,7 @@ For high-throughput unit test suites: each `ScenarioRunner` instance allocates o
 | Extension point | How |
 |---|---|
 | Output framework | Implement `IScenarioOutput` |
-| Custom assertions | Standard FluentAssertions extension methods on `Ensure<T>` |
+| Custom assertions | Standard AwesomeAssertions extension methods on `Ensure<T>` |
 | Context access | `IRunnerContext` is public; can be received via DI if needed |
 | Step sharing | Static methods / classes accepting `IStepRunner` |
 

@@ -10,14 +10,14 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\..\src\FluentScenario.FluentAssertions\FluentScenario.FluentAssertions.csproj" />
+        <ProjectReference Include="..\..\src\FluentScenario.AwesomeAssertions\FluentScenario.AwesomeAssertions.csproj" />
         <ProjectReference Include="..\..\src\FluentScenario\FluentScenario.csproj" />
     </ItemGroup>
 
     <ItemGroup>
         <PackageReference Include="Bogus"/>
-        <PackageReference Include="FluentAssertions"/>
-        <PackageReference Include="FluentAssertions.Analyzers">
+        <PackageReference Include="AwesomeAssertions"/>
+        <PackageReference Include="AwesomeAssertions.Analyzers">
             <PrivateAssets>all</PrivateAssets>
             <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>

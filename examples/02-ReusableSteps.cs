@@ -4,7 +4,7 @@
 // State is shared via SetContextData / GetContextData<T> on IRunnerContext.
 
 using DrifterApps.Seeds.FluentScenario;
-using FluentAssertions;
+using AwesomeAssertions;
 using Xunit;
 using Xunit.Abstractions;
 

@@ -10,7 +10,7 @@ FluentScenario is a **BDD test framework** for C# that structures tests as Given
 
 Two packages:
 - `DrifterApps.Seeds.FluentScenario` — core, required
-- `DrifterApps.Seeds.FluentScenario.FluentAssertions` — optional, adds `.Should()` on `Ensure<T>`
+- `DrifterApps.Seeds.FluentScenario.AwesomeAssertions` — optional, adds `.Should()` on `Ensure<T>`
 
 Target: `net10.0` only.
 
@@ -246,9 +246,9 @@ await ScenarioRunner.Create("test", _output)
 
 ---
 
-## FluentAssertions Integration Notes
+## AwesomeAssertions Integration Notes
 
-Requires the `DrifterApps.Seeds.FluentScenario.FluentAssertions` package.
+Requires the `DrifterApps.Seeds.FluentScenario.AwesomeAssertions` package. It replaces the former `DrifterApps.Seeds.FluentScenario.FluentAssertions` package — do not reference both, and use `using AwesomeAssertions;`, not `using FluentAssertions;`.
 
 Available assertions on `Ensure<T>`:
 
@@ -263,7 +263,7 @@ ensure.Should().NotBeNull();                        // asserts Value is not null
 ensure.Should().BeValid().And.Subject.Value.Should().Be(42);
 ```
 
-The `EnsureAssertions<T>` class lives in the `FluentAssertions` namespace intentionally — it feels native to the assertion library.
+The `EnsureAssertions<T>` class lives in the `AwesomeAssertions` namespace intentionally — it feels native to the assertion library.
 
 ---
 

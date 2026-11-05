@@ -32,7 +32,7 @@ library, not merely *with* it.
 | Path | Contents |
 |---|---|
 | `src/FluentScenario/` | The library: `ScenarioRunner` (partials), `IScenarioRunner`, `IStepRunner`, `IRunnerContext`, `Ensure<T>`, `StepDefinition`, `IScenarioOutput` |
-| `src/FluentScenario.FluentAssertions/` | Assertions package: `Ensure<T>.Should()` → `BeValid()`, `BeInvalid()`, `HaveValue()`, `BeNull()`, `NotBeNull()` |
+| `src/FluentScenario.AwesomeAssertions/` | Assertions package: `Ensure<T>.Should()` → `BeValid()`, `BeInvalid()`, `HaveValue()`, `BeNull()`, `NotBeNull()` |
 | `tests/FluentScenario.Tests/` | xUnit v3 test suite (the only test project) |
 | `tests/FluentScenario.Tests/Samples/` | Executable demonstrations of each API pattern |
 | `examples/` | Standalone usage examples referenced from the docs |
@@ -73,8 +73,8 @@ Versions are centralized — `ManagePackageVersionsCentrally=true`. Add a
 `<PackageVersion>` to `Directory.Packages.props`. Per the engineering principles, do not
 add a new dependency without approval.
 
-`FluentAssertions` is pinned to 7.x deliberately (8.x changed its license). Do not bump it
-to 8 or beyond.
+Assertions use `AwesomeAssertions` (the Apache-2.0 fork of FluentAssertions 7). Do not add
+`FluentAssertions` back — 8.x and later are commercially licensed.
 
 ## Test conventions
 
@@ -82,7 +82,7 @@ Match the existing suite:
 
 - Class carries `[UnitTest]` (the local `ITraitAttribute` adding trait `Category=Unit`).
 - Global usings already cover `Bogus`, `DrifterApps.Seeds.FluentScenario`,
-  `FluentAssertions`, `NSubstitute`, `Xunit` — do not re-import them per file.
+  `AwesomeAssertions`, `NSubstitute`, `Xunit` — do not re-import them per file.
 - Random data comes from a `private readonly Faker _faker = new();`, never hard-coded
   literals, unless the literal is the thing under test.
 - Test names describe behavior:

@@ -25,10 +25,10 @@ To install FluentScenario, you can use the NuGet package manager:
 dotnet add package DrifterApps.Seeds.FluentScenario
 ```
 
-If you use [FluentAssertions](https://fluentassertions.com) to assert your tests. You can use the NuGet package manager:
+If you use [AwesomeAssertions](https://awesomeassertions.org) to assert your tests. You can use the NuGet package manager:
 
 ```sh
-dotnet add package DrifterApps.Seeds.FluentScenario.FluentAssertions
+dotnet add package DrifterApps.Seeds.FluentScenario.AwesomeAssertions
 ```
 
 ## Usage

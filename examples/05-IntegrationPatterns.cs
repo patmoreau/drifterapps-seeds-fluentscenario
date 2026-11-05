@@ -9,7 +9,7 @@
 using System.Net;
 using System.Net.Http.Json;
 using DrifterApps.Seeds.FluentScenario;
-using FluentAssertions;
+using AwesomeAssertions;
 using Xunit;
 using Xunit.Abstractions;
 

@@ -1,0 +1,18 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <AssemblyName>DrifterApps.Seeds.FluentScenario.AwesomeAssertions</AssemblyName>
+        <RootNamespace>DrifterApps.Seeds.FluentScenario.AwesomeAssertions</RootNamespace>
+        <PackageId>DrifterApps.Seeds.FluentScenario.AwesomeAssertions</PackageId>
+        <Product>DrifterApps.Seeds.FluentScenario.AwesomeAssertions</Product>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="AwesomeAssertions" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\FluentScenario\FluentScenario.csproj" />
+    </ItemGroup>
+
+</Project>

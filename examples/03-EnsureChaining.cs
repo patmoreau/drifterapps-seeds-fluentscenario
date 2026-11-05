@@ -4,10 +4,10 @@
 // consumed by the next step. Eliminates the need for context storage in
 // linear workflows.
 //
-// Requires: DrifterApps.Seeds.FluentScenario.FluentAssertions for .Should().BeValid()
+// Requires: DrifterApps.Seeds.FluentScenario.AwesomeAssertions for .Should().BeValid()
 
 using DrifterApps.Seeds.FluentScenario;
-using FluentAssertions;
+using AwesomeAssertions;
 using Xunit;
 using Xunit.Abstractions;
 
@@ -128,10 +128,10 @@ public class EnsureChaining(ITestOutputHelper output)
             .PlayAsync();
     }
 
-    // --- Ensure<T> without FluentAssertions ----------------------------------
+    // --- Ensure<T> without AwesomeAssertions ----------------------------------
 
     [Fact]
-    public async Task EnsureWithoutFluentAssertions()
+    public async Task EnsureWithoutAwesomeAssertions()
     {
         await ScenarioRunner.Create("manual ensure validation", 42, _output)
             .Given<int, string>("value is converted to string",

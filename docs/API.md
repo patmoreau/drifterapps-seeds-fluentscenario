@@ -7,7 +7,7 @@
 | Namespace | Package | Contents |
 |---|---|---|
 | `DrifterApps.Seeds.FluentScenario` | `DrifterApps.Seeds.FluentScenario` | Core types |
-| `FluentAssertions` | `DrifterApps.Seeds.FluentScenario.FluentAssertions` | `EnsureAssertions<T>` extensions |
+| `AwesomeAssertions` | `DrifterApps.Seeds.FluentScenario.AwesomeAssertions` | `EnsureAssertions<T>` extensions |
 
 ---
 
@@ -261,16 +261,16 @@ public static bool operator !=(Ensure<TValue> left, Ensure<TValue> right)
 
 ---
 
-## EnsureAssertions\<T\> (FluentAssertions package)
+## EnsureAssertions\<T\> (AwesomeAssertions package)
 
 `public class EnsureAssertions<TValue>`
 
-Provides FluentAssertions-style assertions on `Ensure<T>`. Available via the `.Should()` extension method after adding the `DrifterApps.Seeds.FluentScenario.FluentAssertions` package.
+Provides AwesomeAssertions-style assertions on `Ensure<T>`. Available via the `.Should()` extension method after adding the `DrifterApps.Seeds.FluentScenario.AwesomeAssertions` package.
 
 ### Extension Method
 
 ```csharp
-// In namespace: FluentAssertions
+// In namespace: AwesomeAssertions
 public static EnsureAssertions<TValue> Should<TValue>(this Ensure<TValue> instance)
 ```
 

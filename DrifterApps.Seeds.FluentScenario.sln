@@ -18,7 +18,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{776C84F1
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FluentScenario.Tests", "tests\FluentScenario.Tests\FluentScenario.Tests.csproj", "{282BEAD1-37BE-47F0-A72A-4506470AA752}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FluentScenario.FluentAssertions", "src\FluentScenario.FluentAssertions\FluentScenario.FluentAssertions.csproj", "{9B62488D-7FC6-49D4-9F59-05095AA39F8C}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FluentScenario.AwesomeAssertions", "src\FluentScenario.AwesomeAssertions\FluentScenario.AwesomeAssertions.csproj", "{9B62488D-7FC6-49D4-9F59-05095AA39F8C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -1,11 +1,11 @@
+using AwesomeAssertions.Execution;
+using AwesomeAssertions.Primitives;
 using DrifterApps.Seeds.FluentScenario;
-using FluentAssertions.Execution;
-using FluentAssertions.Primitives;
 
 // ReSharper disable once CheckNamespace
 
 #pragma warning disable IDE0130
-namespace FluentAssertions;
+namespace AwesomeAssertions;
 #pragma warning restore IDE0130
 
 /// <summary>
@@ -19,14 +19,17 @@ public static class EnsureAssertionsExtensions
     /// <typeparam name="TValue">The type of the value contained in the result.</typeparam>
     /// <param name="instance">The result instance to assert.</param>
     /// <returns>An assertion object for the specified result instance.</returns>
-    public static EnsureAssertions<TValue> Should<TValue>(this Ensure<TValue> instance) => new(instance);
+    public static EnsureAssertions<TValue> Should<TValue>(this Ensure<TValue> instance) =>
+        new(instance, AssertionChain.GetOrCreate());
 }
 
 /// <summary>
 ///     Provides assertion methods for <see cref="Ensure{TValue}" /> instances.
 /// </summary>
-public class EnsureAssertions<TValue>(Ensure<TValue> instance)
-    : ReferenceTypeAssertions<Ensure<TValue>, EnsureAssertions<TValue>>(instance)
+/// <param name="instance">The <see cref="Ensure{TValue}" /> instance to assert.</param>
+/// <param name="assertionChain">The assertion chain the assertions report their failures to.</param>
+public class EnsureAssertions<TValue>(Ensure<TValue> instance, AssertionChain assertionChain)
+    : ReferenceTypeAssertions<Ensure<TValue>, EnsureAssertions<TValue>>(instance, assertionChain)
 {
     /// <summary>
     ///     Gets the identifier for the assertion.
@@ -51,7 +54,7 @@ public class EnsureAssertions<TValue>(Ensure<TValue> instance)
     [CustomAssertion]
     public AndConstraint<EnsureAssertions<TValue>> BeValid(string because = "", params object[] becauseArgs)
     {
-        _ = Execute.Assertion
+        _ = CurrentAssertionChain
             .ForCondition(Subject.IsValid)
             .BecauseOf(because, becauseArgs)
             .WithDefaultIdentifier(Identifier)
@@ -71,7 +74,7 @@ public class EnsureAssertions<TValue>(Ensure<TValue> instance)
     [CustomAssertion]
     public AndConstraint<EnsureAssertions<TValue>> BeInvalid(string because = "", params object[] becauseArgs)
     {
-        _ = Execute.Assertion
+        _ = CurrentAssertionChain
             .ForCondition(!Subject.IsValid)
             .BecauseOf(because, becauseArgs)
             .WithDefaultIdentifier(Identifier)
@@ -91,7 +94,7 @@ public class EnsureAssertions<TValue>(Ensure<TValue> instance)
     [CustomAssertion]
     public new AndConstraint<EnsureAssertions<TValue>> BeNull(string because = "", params object[] becauseArgs)
     {
-        _ = Execute.Assertion
+        _ = CurrentAssertionChain
             .ForCondition(Subject is { IsNullable: true, IsValid: true, Value: null })
             .BecauseOf(because, becauseArgs)
             .WithDefaultIdentifier(Identifier)
@@ -111,7 +114,7 @@ public class EnsureAssertions<TValue>(Ensure<TValue> instance)
     [CustomAssertion]
     public new AndConstraint<EnsureAssertions<TValue>> NotBeNull(string because = "", params object[] becauseArgs)
     {
-        _ = Execute.Assertion
+        _ = CurrentAssertionChain
             .ForCondition(Subject is { IsValid: true, Value: not null })
             .BecauseOf(because, becauseArgs)
             .WithDefaultIdentifier(Identifier)
@@ -133,7 +136,7 @@ public class EnsureAssertions<TValue>(Ensure<TValue> instance)
     public AndConstraint<EnsureAssertions<TValue>> HaveValue(TValue expectedValue,
         string because = "", params object[] becauseArgs)
     {
-        _ = Execute.Assertion
+        _ = CurrentAssertionChain
             .ForCondition(Subject.IsValid && Equals(Subject.Value, expectedValue))
             .BecauseOf(because, becauseArgs)
             .WithDefaultIdentifier(Identifier)

@@ -123,7 +123,7 @@ authority that the version shipped, not this index. Both packages ship from this
 repo:
 
 ```bash
-for pkg in drifterapps.seeds.fluentscenario drifterapps.seeds.fluentscenario.fluentassertions; do
+for pkg in drifterapps.seeds.fluentscenario drifterapps.seeds.fluentscenario.awesomeassertions; do
   echo "$pkg: $(curl -s "https://api.nuget.org/v3-flatcontainer/$pkg/index.json" | jq -r '.versions[-1]')"
 done
 ```

@@ -1,4 +1,4 @@
-namespace FluentScenario.Tests.FluentAssertions;
+namespace FluentScenario.Tests.AwesomeAssertions;
 
 [UnitTest]
 public class EnsureAssertionsExtensionsTests
