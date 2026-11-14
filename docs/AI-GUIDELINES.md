@@ -12,7 +12,7 @@ Two packages:
 - `DrifterApps.Seeds.FluentScenario` — core, required
 - `DrifterApps.Seeds.FluentScenario.AwesomeAssertions` — optional, adds `.Should()` on `Ensure<T>`
 
-Target: `net10.0` only.
+Targets: `net10.0` and `net11.0`.
 
 ---
 

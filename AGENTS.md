@@ -39,9 +39,9 @@ library, not merely *with* it.
 | `docs/`, `README.md`, `llms.txt` | Published documentation, for people **using** the library — packed into the NuGet package, see "Documentation is part of the API" below |
 | `docs/contributing/` | Process docs, for people **working on** this repo — never packed |
 
-Assembly/namespace: `DrifterApps.Seeds.FluentScenario`. Target: `net10.0` only —
-`Directory.Build.props` owns `TargetFramework`; individual projects must not override it.
-SDK pinned in `global.json` (11.0.100, `rollForward: latestMinor`).
+Assembly/namespace: `DrifterApps.Seeds.FluentScenario`. Targets: `net10.0` and
+`net11.0` — `Directory.Build.props` owns `TargetFrameworks`; individual projects must not
+override it. SDK pinned in `global.json` (11.0.100, `rollForward: latestMinor`).
 
 ## Build and test
 
