@@ -49,9 +49,8 @@
         <PackageReadmeFile>README.md</PackageReadmeFile>
     </PropertyGroup>
 
-    <!-- Allow dotnet pack to create NuGet packages -->
+    <!-- Include symbols when dotnet pack creates NuGet packages -->
     <PropertyGroup>
-        <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
         <IncludeSymbols>true</IncludeSymbols>
     </PropertyGroup>
 

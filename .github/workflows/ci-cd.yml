@@ -113,7 +113,7 @@ jobs:
         run: dotnet restore
 
       - name: Build
-        run: dotnet build --no-restore --configuration Release --framework ${{ matrix.framework }} /property:Version=${{ env.ASSEMBLY_VERSION }} /property:GeneratePackageOnBuild=false /maxcpucount:1
+        run: dotnet build --no-restore --configuration Release --framework ${{ matrix.framework }} /property:Version=${{ env.ASSEMBLY_VERSION }} /maxcpucount:1
 
       - name: Tests
         run: dotnet test --no-restore --no-build --configuration Release --framework ${{ matrix.framework }} --report-trx --report-trx-filename test-results.trx --results-directory ./tests-results --coverage --coverage-output-format cobertura
