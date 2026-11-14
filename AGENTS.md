@@ -41,7 +41,7 @@ library, not merely *with* it.
 
 Assembly/namespace: `DrifterApps.Seeds.FluentScenario`. Target: `net10.0` only —
 `Directory.Build.props` owns `TargetFramework`; individual projects must not override it.
-SDK pinned in `global.json` (10.0.401, `rollForward: latestMinor`).
+SDK pinned in `global.json` (11.0.100, `rollForward: latestMinor`).
 
 ## Build and test
 
