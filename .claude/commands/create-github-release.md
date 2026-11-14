@@ -54,6 +54,14 @@ Tags are `vX.Y.Z` and are created automatically by the `tagging` job on pushes t
 the last release. If the computed version is one that was already published to
 NuGet, stop: the user needs a `+semver:` commit first.
 
+That bump is usually an empty commit (`git commit --allow-empty`) whose message
+carries the trailer, e.g. `chore(infra): Bump minor version to X.Y.0` with
+`+semver: minor` in the body. Pushing it changes no code, so `ci-cd`'s
+`check_changes` skips `set-version`, `build` and `tagging`: **no tag is created
+and no version is computed for it.** Do not wait for one — the release in step 4
+creates the tag on that commit, and the release-triggered run computes the
+version from it.
+
 ## 3. Build the changelog
 
 Take the range from the previously *released* tag (not merely the previous tag)
@@ -94,8 +102,10 @@ The tag normally already exists. Create the release against it:
 gh release create "$TARGET" --title "$TARGET" --notes-file <notes-file>
 ```
 
-If the tag does not exist yet, add `--target main` so GitHub creates it from the
-current `main` commit. Use `--latest` only when this is the newest version — it
+If the tag does not exist yet — always the case after an empty bump commit —
+add `--target` so GitHub creates it: `main`, or the commit's **full** 40-character
+SHA (`git rev-parse HEAD`) to pin it. A short SHA fails with
+`HTTP 422 ... Release.target_commitish is invalid`. Use `--latest` only when this is the newest version — it
 is the default for the highest semver, so pass `--latest=false` when cutting a
 patch for an older line.
 
