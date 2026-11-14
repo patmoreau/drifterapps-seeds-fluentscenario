@@ -34,7 +34,6 @@
     <!-- Enable XML documentation for all projects and configurations -->
     <PropertyGroup>
         <GenerateDocumentationFile>true</GenerateDocumentationFile>
-        <NoWarn>$(NoWarn);1591</NoWarn>
     </PropertyGroup>
 
     <!-- Set the NuGet repository URL for all projects -->

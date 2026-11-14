@@ -7,6 +7,8 @@
         <AssemblyName>DrifterApps.Seeds.FluentScenario.Tests</AssemblyName>
         <RootNamespace>FluentScenario.Tests</RootNamespace>
         <PackageId>DrifterApps.Seeds.FluentScenario.Tests</PackageId>
+        <!-- Test classes and methods are public for xUnit, not documented API -->
+        <NoWarn>$(NoWarn);CS1591</NoWarn>
     </PropertyGroup>
 
     <ItemGroup>
